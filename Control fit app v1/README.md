@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Control Fit - Aplicación de Monitoreo de Grasa Corporal y Peso
 
 Aplicación web para monitoreo de grasa corporal y peso, enfocada en ayudar a los usuarios a interpretar su progreso físico a lo largo del tiempo.
@@ -40,18 +39,12 @@ control-fit-app-v1/
 │   └── lib/          # Utilidades y helpers
 └── ARCHITECTURE.md   # Documentación de arquitectura
 ```
-=======
-# Control Fit Backend
-
-Backend API para la aplicación de monitoreo de grasa corporal y peso.
->>>>>>> 143e50c803246db2158888911cc03e86d7f7ea4f
 
 ## 🚀 Inicio Rápido
 
 ### Prerrequisitos
 
 - Python 3.11+
-<<<<<<< HEAD
 - Node.js 18+
 - npm o yarn
 
@@ -63,22 +56,11 @@ cd backend
 ```
 
 2. Crear entorno virtual:
-=======
-- pip
-
-### Instalación
-
-1. Crear un entorno virtual:
->>>>>>> 143e50c803246db2158888911cc03e86d7f7ea4f
 ```bash
 python -m venv venv
 ```
 
-<<<<<<< HEAD
 3. Activar entorno virtual:
-=======
-2. Activar el entorno virtual:
->>>>>>> 143e50c803246db2158888911cc03e86d7f7ea4f
 ```bash
 # Windows
 venv\Scripts\activate
@@ -87,27 +69,12 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-<<<<<<< HEAD
 4. Instalar dependencias:
-=======
-3. Instalar dependencias:
->>>>>>> 143e50c803246db2158888911cc03e86d7f7ea4f
 ```bash
 pip install -r requirements.txt
 ```
 
-<<<<<<< HEAD
 5. Iniciar servidor:
-=======
-4. Crear archivo `.env` (opcional):
-```env
-DATABASE_URL=sqlite:///./control_fit.db
-SECRET_KEY=your-secret-key-here
-PHOTOS_STORAGE_PATH=./storage/photos
-```
-
-5. Ejecutar la aplicación:
->>>>>>> 143e50c803246db2158888911cc03e86d7f7ea4f
 ```bash
 # Windows
 start.bat
@@ -116,7 +83,6 @@ start.bat
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8001
 ```
 
-<<<<<<< HEAD
 La API estará disponible en `http://localhost:8001`
 Documentación Swagger: `http://localhost:8001/docs`
 
@@ -205,106 +171,3 @@ Arndev10
 ## 🔗 Enlaces
 
 - Repositorio: https://github.com/arndev10/Arndev-projects/tree/main/Control%20fit%20app%20v1
-=======
-La API estará disponible en:
-- **API**: `http://localhost:8001`
-- **Documentación Swagger**: `http://localhost:8001/docs`
-- **ReDoc**: `http://localhost:8001/redoc`
-
-## 📁 Estructura
-
-```
-backend/
-├── app/
-│   ├── main.py          # Entrypoint de FastAPI
-│   ├── config.py        # Configuración y variables de entorno
-│   ├── db/              # Modelos y configuración de base de datos
-│   │   ├── models.py    # Modelos SQLAlchemy
-│   │   ├── session.py   # Sesión de base de datos
-│   │   └── base.py      # Base para modelos
-│   ├── api/             # Rutas HTTP
-│   │   ├── routes/      # Endpoints por módulo
-│   │   └── deps.py      # Dependencias comunes (auth, db)
-│   ├── domain/          # Lógica de negocio
-│   │   ├── trend_analysis.py
-│   │   ├── body_analysis.py
-│   │   ├── feedback_engine.py
-│   │   └── feedback_helpers.py
-│   ├── services/         # Servicios externos (AI, storage)
-│   │   ├── image_analysis.py
-│   │   ├── llm_service.py
-│   │   └── storage_service.py
-│   ├── workers/         # Procesos asíncronos
-│   │   └── tasks.py
-│   └── schemas/          # Schemas de Pydantic
-├── storage/              # Almacenamiento de fotos
-└── requirements.txt      # Dependencias Python
-```
-
-## 🔌 Endpoints Principales
-
-### Autenticación
-- `POST /api/auth/register` - Registro de usuario
-- `POST /api/auth/login` - Inicio de sesión
-- `GET /api/auth/me` - Información del usuario actual
-
-### Perfiles
-- `GET /api/profile/active` - Perfil activo
-- `POST /api/profile` - Crear nuevo perfil
-- `GET /api/profile` - Listar perfiles
-
-### Registros Diarios
-- `GET /api/daily-logs` - Listar registros
-- `POST /api/daily-logs` - Crear registro
-- `PUT /api/daily-logs/{id}` - Actualizar registro
-- `DELETE /api/daily-logs/{id}` - Eliminar registro
-
-### Fotos
-- `GET /api/photos` - Listar fotos
-- `POST /api/photos` - Subir foto
-- `GET /api/photos/{id}/file` - Obtener archivo de foto
-- `PUT /api/photos/{id}` - Actualizar foto
-- `DELETE /api/photos/{id}` - Eliminar foto
-
-### Comidas Trampa
-- `GET /api/cheat-meals` - Listar comidas trampa
-- `POST /api/cheat-meals` - Crear comida trampa
-- `PUT /api/cheat-meals/{id}` - Actualizar
-- `DELETE /api/cheat-meals/{id}` - Eliminar
-
-### Feedback Semanal
-- `GET /api/feedback/weekly` - Listar feedbacks
-- `POST /api/feedback/weekly` - Solicitar feedback
-- `GET /api/feedback/weekly/{id}` - Obtener feedback específico
-
-### Jobs (Trabajos Asíncronos)
-- `GET /api/jobs` - Listar jobs
-- `GET /api/jobs/{id}` - Obtener job
-- `GET /api/jobs/{id}/status` - Estado del job
-
-## 🔐 Autenticación
-
-Todos los endpoints (excepto registro y login) requieren autenticación JWT. Incluir el token en el header:
-
-```
-Authorization: Bearer <token>
-```
-
-## 📊 Base de Datos
-
-Por defecto usa SQLite (`control_fit.db`). Para producción, configurar PostgreSQL en `.env`:
-
-```env
-DATABASE_URL=postgresql://user:password@localhost/control_fit
-```
-
-## 🧪 Testing
-
-Ver [TESTING.md](./TESTING.md) para información sobre testing.
-
-## 📝 Documentación Adicional
-
-- [API_ROUTES.md](./API_ROUTES.md) - Documentación detallada de rutas
-- [QUICK_START.md](./QUICK_START.md) - Guía de inicio rápido
-- [VALIDATIONS_SUMMARY.md](./VALIDATIONS_SUMMARY.md) - Resumen de validaciones
->>>>>>> 143e50c803246db2158888911cc03e86d7f7ea4f
