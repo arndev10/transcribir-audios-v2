@@ -32,7 +32,7 @@ app.add_middleware(
 
 # Inicializar el transcriber (lazy loading)
 transcriber = WhisperTranscriber(
-    model_size="medium",
+    model_size="tiny",
     device="auto",
     compute_type="auto"
 )
