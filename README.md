@@ -90,7 +90,7 @@ python main.py
 
 El backend estará disponible en `http://localhost:8000`
 
-**Nota**: La primera vez que ejecutes, faster-whisper descargará el modelo Whisper (modelo `medium` por defecto, ~1.4GB). Esto puede tardar unos minutos.
+**Nota**: La primera vez que ejecutes, faster-whisper descargará el modelo Whisper configurado (en este MVP se usa `tiny` por defecto para despliegues cloud con recursos limitados). Esto puede tardar unos minutos.
 
 ### Frontend
 
@@ -154,13 +154,21 @@ transcriber = WhisperTranscriber(
 - `large-v2` - Máxima precisión (~2.9GB)
 - `large-v3` - Última versión large (~2.9GB)
 
+### Modelo elegido para este MVP
+
+Para este MVP se eligió **Whisper `tiny`** en despliegue cloud por estabilidad y costo operativo (memoria/CPU) en entornos limitados como planes gratuitos.
+
+Si necesitas mayor precisión, esta mejora al correr modelos más grandes en local:
+- `base`/`small`: mejor equilibrio entre velocidad y calidad.
+- `medium`/`large`: mayor precisión, especialmente en audios largos o con ruido, a costa de más recursos.
+
 ### Forzar CPU o GPU
 
 En `backend/main.py`:
 
 ```python
 transcriber = WhisperTranscriber(
-    model_size="medium",
+    model_size="tiny",
     device="cuda",  # o "cpu"
     compute_type="float16"  # o "int8" para CPU
 )
