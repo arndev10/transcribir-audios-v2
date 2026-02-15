@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import CircularProgress from './CircularProgress'
 
 const FALLBACK_EXTENSIONS = ['.ogg', '.opus', '.mp3', '.mpeg', '.mpg', '.wav', '.m4a', '.flac']
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 function AudioUploader({ onTranscription, onError, onLoading, onProgress, isLoading, progress }) {
   const [selectedFile, setSelectedFile] = useState(null)
@@ -11,7 +12,7 @@ function AudioUploader({ onTranscription, onError, onLoading, onProgress, isLoad
   const progressIntervalRef = useRef(null)
 
   useEffect(() => {
-    fetch('http://localhost:8000/allowed-formats')
+    fetch(`${API_URL}/allowed-formats`)
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(data => {
         if (data.extensions && Array.isArray(data.extensions) && data.extensions.length > 0) {
@@ -106,7 +107,7 @@ function AudioUploader({ onTranscription, onError, onLoading, onProgress, isLoad
     formData.append('file', selectedFile)
 
     try {
-      const response = await fetch('http://localhost:8000/transcribe', {
+      const response = await fetch(`${API_URL}/transcribe`, {
         method: 'POST',
         body: formData,
       })
