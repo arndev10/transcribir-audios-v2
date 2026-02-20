@@ -1,198 +1,68 @@
-# WhatsApp Audio Transcriber 🎤→📝
+# WhatsApp Audio Transcriber v2
 
-MVP funcional de una aplicación web para transcribir audios de WhatsApp a texto usando Whisper local. Procesamiento 100% local, sin costos de API ni tokens.
+Web application for transcribing WhatsApp voice messages to text using local Whisper AI. Fully private, zero API costs. Deployed on Render (backend) + Vercel (frontend).
 
-## 🎯 Características
+## Features
 
-- ✅ Subida de audios en formatos `.ogg`, `.opus`, `.mp3`, `.mpeg`, `.mpg`, `.wav`, `.m4a`, `.flac`
-- ✅ Transcripción a texto usando Whisper local (faster-whisper)
-- ✅ Detección automática de idioma
-- ✅ Interfaz web moderna y responsive
-- ✅ Copiar texto al portapapeles
-- ✅ Descargar transcripción como archivo `.txt`
-- ✅ Procesamiento 100% local (sin APIs externas)
-- ✅ Optimización para GPU (CUDA) cuando está disponible
+- Multi-format audio support: OGG, OPUS, MP3, MPEG, WAV, M4A, FLAC
+- Automatic language detection
+- Local transcription via faster-whisper (no external APIs)
+- GPU acceleration support (CUDA)
+- Copy to clipboard and download as .txt
+- Modern responsive UI
 
-## 🧠 Tecnologías Usadas
+## Tech Stack
 
-### Backend
-- **Python 3.10+**
-- **FastAPI** - Framework web moderno y rápido
-- **faster-whisper** - Implementación optimizada de Whisper
-- **PyTorch** - Para soporte GPU/CUDA
-- **Uvicorn** - Servidor ASGI
+**Backend:** Python, FastAPI, faster-whisper, PyTorch, Uvicorn
+**Frontend:** React 18, Vite, TailwindCSS
 
-### Frontend
-- **React 18** - Biblioteca UI
-- **Vite** - Build tool y dev server
-- **TailwindCSS** - Framework CSS utility-first
-
-## 📁 Estructura del Proyecto
-
-```
-whatsapp-audio-to-text/
-├── backend/
-│   ├── main.py              # API FastAPI principal
-│   ├── whisper_service.py   # Servicio de transcripción Whisper
-│   └── requirements.txt     # Dependencias Python
-├── frontend/
-│   ├── src/
-│   │   ├── components/      # Componentes React
-│   │   ├── App.jsx         # Componente principal
-│   │   ├── main.jsx        # Entry point
-│   │   └── index.css       # Estilos globales
-│   ├── index.html
-│   ├── package.json
-│   ├── vite.config.js
-│   └── tailwind.config.js
-└── README.md
-```
-
-## 🚀 Cómo Ejecutar
-
-### Prerrequisitos
-
-- Python 3.10 o superior
-- Node.js 18+ y npm
-- (Opcional) CUDA toolkit si quieres usar GPU
+## Setup
 
 ### Backend
 
-1. Navega a la carpeta `backend`:
 ```bash
 cd backend
-```
-
-2. Crea un entorno virtual (recomendado):
-```bash
 python -m venv venv
-```
-
-3. Activa el entorno virtual:
-   - Windows:
-   ```bash
-   venv\Scripts\activate
-   ```
-   - Linux/Mac:
-   ```bash
-   source venv/bin/activate
-   ```
-
-4. Instala las dependencias:
-```bash
+venv\Scripts\activate  # Windows
 pip install -r requirements.txt
-```
-
-5. Ejecuta el servidor:
-```bash
 python main.py
 ```
 
-El backend estará disponible en `http://localhost:8000`
+Backend runs at `http://localhost:8000`
 
-**Nota**: La primera vez que ejecutes, faster-whisper descargará el modelo Whisper configurado (en este MVP se usa `tiny` por defecto para despliegues cloud con recursos limitados). Esto puede tardar unos minutos.
+The first run downloads the Whisper model (~75MB for `tiny`).
 
 ### Frontend
 
-1. Navega a la carpeta `frontend`:
 ```bash
 cd frontend
-```
-
-2. Instala las dependencias:
-```bash
 npm install
-```
-
-3. Ejecuta el servidor de desarrollo:
-```bash
 npm run dev
 ```
 
-El frontend estará disponible en `http://localhost:5173`
+Frontend runs at `http://localhost:5173`
 
-## 📖 Uso
+## Whisper Model Configuration
 
-1. Abre `http://localhost:5173` en tu navegador
-2. Haz clic en el área de carga y selecciona un archivo de audio
-3. Haz clic en "Transcribir Audio"
-4. Espera a que se complete la transcripción (puede tardar según la duración del audio)
-5. Copia el texto o descárgalo como archivo `.txt`
+Edit `backend/main.py` to change the model size:
 
-## 🎵 Formatos disponibles
+| Model | Size | Speed | Accuracy |
+|-------|------|-------|----------|
+| tiny | ~75MB | Fastest | Basic |
+| base | ~142MB | Fast | Good |
+| small | ~466MB | Moderate | Better |
+| medium | ~1.4GB | Slow | High |
+| large-v3 | ~2.9GB | Slowest | Best |
 
-La app acepta los siguientes formatos de audio:
+Default is `tiny` for cloud deployment. Use `medium` or larger for local use.
 
-- `.ogg` — Ogg (p. ej. notas de voz WhatsApp)
-- `.opus` — Opus
-- `.mp3` — MP3
-- `.mpeg` — Archivo MPEG (.mpeg)
-- `.mpg` — MPEG (.mpg)
-- `.wav` — WAV
-- `.m4a` — M4A (AAC)
-- `.flac` — FLAC
+## API
 
-## ⚙️ Configuración
+**POST /transcribe** — Transcribe an audio file
 
-### Cambiar el Modelo de Whisper
-
-En `backend/main.py`, puedes cambiar el tamaño del modelo:
-
-```python
-transcriber = WhisperTranscriber(
-    model_size="large-v3",  # Opciones: tiny, base, small, medium, large-v2, large-v3
-    device="auto",
-    compute_type="auto"
-)
-```
-
-**Modelos disponibles:**
-- `tiny` - Más rápido, menos preciso (~75MB)
-- `base` - Balance velocidad/precisión (~142MB)
-- `small` - Buen balance (~466MB)
-- `medium` - Mejor precisión (~1.4GB) - **Recomendado**
-- `large-v2` - Máxima precisión (~2.9GB)
-- `large-v3` - Última versión large (~2.9GB)
-
-### Modelo elegido para este MVP
-
-Para este MVP se eligió **Whisper `tiny`** en despliegue cloud por estabilidad y costo operativo (memoria/CPU) en entornos limitados como planes gratuitos.
-
-Si necesitas mayor precisión, esta mejora al correr modelos más grandes en local:
-- `base`/`small`: mejor equilibrio entre velocidad y calidad.
-- `medium`/`large`: mayor precisión, especialmente en audios largos o con ruido, a costa de más recursos.
-
-### Forzar CPU o GPU
-
-En `backend/main.py`:
-
-```python
-transcriber = WhisperTranscriber(
-    model_size="tiny",
-    device="cuda",  # o "cpu"
-    compute_type="float16"  # o "int8" para CPU
-)
-```
-
-## 🧪 Endpoints API
-
-### `GET /`
-Endpoint de salud básico.
-
-### `GET /health`
-Endpoint de salud detallado con información del modelo.
-
-### `POST /transcribe`
-Transcribe un archivo de audio.
-
-**Request:**
-- `file`: Archivo de audio (multipart/form-data)
-- `language` (opcional): Código de idioma (ej: `es`, `en`)
-
-**Response:**
 ```json
 {
-  "text": "Texto transcrito completo...",
+  "text": "Transcribed text...",
   "language": "es",
   "language_probability": 0.95,
   "duration": 45.2,
@@ -200,69 +70,25 @@ Transcribe un archivo de audio.
 }
 ```
 
-## 🎨 Por Qué Whisper Local?
+**GET /health** — Model info and status
 
-1. **Costo Cero**: No hay costos de API ni tokens
-2. **Privacidad**: Todo el procesamiento es local, tus audios nunca salen de tu máquina
-3. **Sin Límites**: No hay límites de uso ni rate limiting
-4. **Offline**: Funciona sin conexión a internet
-5. **Control Total**: Puedes ajustar parámetros y modelos según tus necesidades
+## Project Structure
 
-## 🗺️ Roadmap
+```
+├── backend/
+│   ├── main.py              # FastAPI application
+│   ├── whisper_service.py   # Whisper transcription service
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── components/      # React components
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── package.json
+│   └── vite.config.js
+└── .gitignore
+```
 
-- [ ] Resumen automático de textos largos usando modelos locales
-- [ ] Soporte para múltiples archivos en batch
-- [ ] Historial de transcripciones
-- [ ] Exportación a diferentes formatos (PDF, DOCX)
-- [ ] Versión desktop con Tauri
-- [ ] Mejoras en la UI/UX
-- [ ] Soporte para timestamps en la transcripción
-- [ ] Detección de múltiples hablantes
+## License
 
-## 🐛 Solución de Problemas
-
-### Error: "Formato de archivo no soportado" y no aparece .mpeg en la lista
-
-**Mensaje:** `Formato de archivo no soportado. Formatos permitidos: .m4a, .wav, .opus, .mp3, .flac, .ogg`
-
-**Posibles causas:**
-
-1. **Backend sin reiniciar**: El servidor del backend sigue usando una versión antigua del código. **Solución:** Cierra el proceso del backend (Ctrl+C) y vuelve a ejecutar `python main.py` (o `py main.py`) desde la carpeta `backend`. La lista actual incluye: `.ogg`, `.opus`, `.mp3`, `.mpeg`, `.mpg`, `.wav`, `.m4a`, `.flac`.
-
-2. **Carpeta equivocada**: Estás ejecutando el backend desde otra carpeta (por ejemplo, una copia del proyecto que no tiene los últimos cambios). **Solución:** Ejecuta el backend desde `Transcribir audios/backend` dentro de este proyecto.
-
-3. **Extensión del archivo**: El archivo debe terminar en `.mpeg` o `.mpg`. Si tiene otro nombre (por ejemplo `.mpg4` o sin extensión), no será aceptado. **Solución:** Asegúrate de que el nombre del archivo termine en `.mpeg` o `.mpg`.
-
-4. **Caché del navegador**: En raros casos, el frontend puede estar usando una versión antigua. **Solución:** Recarga la página con Ctrl+F5 o vacía la caché.
-
-### Error: "CUDA out of memory"
-- Reduce el tamaño del modelo (usa `small` o `base` en lugar de `medium`)
-- O fuerza el uso de CPU: `device="cpu"`
-
-### Error: "Model not found"
-- La primera ejecución descarga el modelo automáticamente
-- Asegúrate de tener conexión a internet la primera vez
-- El modelo se guarda en `~/.cache/huggingface/`
-
-### El backend no responde
-- Verifica que el puerto 8000 esté libre
-- Revisa los logs del servidor para errores
-- Asegúrate de que todas las dependencias estén instaladas
-
-### El frontend no se conecta al backend
-- Verifica que el backend esté corriendo en `http://localhost:8000`
-- Revisa la consola del navegador para errores CORS
-- Asegúrate de que el proxy en `vite.config.js` esté configurado correctamente
-
-## 📝 Licencia
-
-Este proyecto es de código abierto y está disponible para uso en portfolio profesional.
-
-## 👨‍💻 Autor
-
-Desarrollado como MVP para demostración en portfolio profesional.
-
----
-
-**Nota**: Este es un MVP funcional. Para producción, considera agregar validaciones adicionales, manejo de errores más robusto, autenticación, y optimizaciones de rendimiento.
-
+Open source — available for personal and educational use.
